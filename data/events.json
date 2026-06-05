@@ -1,0 +1,101 @@
+[
+  {
+    "title": "2026 秋季招新宣讲会",
+    "description": "了解图灵学社的历史、方向和招新流程，现场答疑。欢迎所有对计算机感兴趣的同学参加。",
+    "date": "2026-09-15",
+    "day": "15",
+    "month": "9月",
+    "dateStr": "2026-09-15",
+    "time": "19:00 - 21:00",
+    "location": "教学楼 A201",
+    "status": "soon"
+  },
+  {
+    "title": "暑期 Hackathon 48 小时编程挑战",
+    "description": "自由组队（1-4 人），48 小时内完成一个完整项目。主题现场公布，不限技术栈。",
+    "date": "2026-07-20",
+    "day": "20",
+    "month": "7月",
+    "dateStr": "2026-07-20",
+    "time": "周六 9:00 起",
+    "location": "计算机学院创新实验室",
+    "status": "open"
+  },
+  {
+    "title": "AI 与大模型技术分享",
+    "description": "邀请业界学长分享大模型训练与部署经验，涵盖 Prompt Engineering、RAG、Agent 等热门话题。",
+    "date": "2026-04-10",
+    "day": "10",
+    "month": "4月",
+    "dateStr": "2026-04-10",
+    "time": "19:00 - 21:00",
+    "location": "教学楼 B103",
+    "status": "past"
+  },
+  {
+    "title": "春季学期 Workshop：Git 协作开发",
+    "description": "面向新手的 Git 实操课：分支策略、Pull Request、Merge Conflict 处理。请自带笔记本电脑。",
+    "date": "2026-03-22",
+    "day": "22",
+    "month": "3月",
+    "dateStr": "2026-03-22",
+    "time": "14:00 - 17:00",
+    "location": "教学楼 C305",
+    "status": "past"
+  },
+  {
+    "title": "2026 春季招新面试",
+    "description": "春季招新第二轮面试，考察技术基础、学习热情和团队协作意愿。",
+    "date": "2026-03-15",
+    "day": "15",
+    "month": "3月",
+    "dateStr": "2026-03-15",
+    "time": "14:00 - 18:00",
+    "location": "计算机学院 301",
+    "status": "past"
+  },
+  {
+    "title": "ACM 竞赛集训营第一周",
+    "description": "讲解基础数据结构（栈、队列、链表、哈希表）和常见算法模板。适合有一定编程基础的同学。",
+    "date": "2025-12-05",
+    "day": "05",
+    "month": "12月",
+    "dateStr": "2025-12-05",
+    "time": "周六 14:00 - 17:00",
+    "location": "教学楼 A201",
+    "status": "past"
+  },
+  {
+    "title": "技术分享：从零写一个编译器",
+    "description": "学社技术骨干分享编译原理实战：词法分析 → 语法分析 → 代码生成，用 Rust 实现一个玩具语言。",
+    "date": "2025-11-18",
+    "day": "18",
+    "month": "11月",
+    "dateStr": "2025-11-18",
+    "time": "19:00 - 21:00",
+    "location": "教学楼 B103",
+    "status": "past"
+  },
+  {
+    "title": "首届校内 Hackathon",
+    "description": "联合校团委举办，48 小时极限编程，200+ 参赛者。主题：校园生活数字化。",
+    "date": "2025-10-20",
+    "day": "20",
+    "month": "10月",
+    "dateStr": "2025-10-20",
+    "time": "周六 9:00 起",
+    "location": "体育馆多功能厅",
+    "status": "past"
+  },
+  {
+    "title": "2025 秋季招新笔试",
+    "description": "秋季招新第一轮笔试，考察计算机基础：编程、数据结构、数学逻辑。请带笔参加。",
+    "date": "2025-09-25",
+    "day": "25",
+    "month": "9月",
+    "dateStr": "2025-09-25",
+    "time": "19:00 - 20:30",
+    "location": "教学楼 A301-306",
+    "status": "past"
+  }
+]

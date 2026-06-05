@@ -1,0 +1,134 @@
+[
+  {
+    "title": "Rust 所有权与借用 — 入门讲义",
+    "description": "从内存安全角度理解 Rust 最核心的所有权系统，包含代码示例和练习题。",
+    "category": "讲座讲义",
+    "fileType": "PDF",
+    "fileSize": "2.3MB",
+    "date": "2026-05-10",
+    "link": "https://pan.baidu.com/s/example1",
+    "code": "turs"
+  },
+  {
+    "title": "机器学习入门：线性回归的数学推导",
+    "description": "包含 PPT 课件和推导手稿扫描版，配合博客文章使用。",
+    "category": "讲座讲义",
+    "fileType": "PDF + PPTX",
+    "fileSize": "8.7MB",
+    "date": "2026-03-08",
+    "link": "https://pan.baidu.com/s/example2",
+    "code": "turs"
+  },
+  {
+    "title": "Linux 进程调度深度解析",
+    "description": "CFS 调度器源码分析，包含内核代码注释版和流程图。",
+    "category": "讲座讲义",
+    "fileType": "PDF",
+    "fileSize": "3.1MB",
+    "date": "2026-04-28",
+    "link": "https://pan.baidu.com/s/example3"
+  },
+  {
+    "title": "前端性能优化实战分享",
+    "description": "Web Vitals 指标详解，含 Lighthouse 实操手册和优化案例。",
+    "category": "讲座讲义",
+    "fileType": "PDF",
+    "fileSize": "5.4MB",
+    "date": "2026-04-15",
+    "link": "https://pan.baidu.com/s/example4",
+    "code": "turs"
+  },
+  {
+    "title": "简易关系型数据库源码（C 语言）",
+    "description": "支持基本 SQL 子集的玩具数据库，包含 B-Tree 存储引擎和递归下降 SQL 解析器。约 800 行 C 代码。",
+    "category": "代码项目",
+    "fileType": "ZIP",
+    "fileSize": "156KB",
+    "date": "2026-03-22",
+    "link": "https://github.com/example/simple-db"
+  },
+  {
+    "title": "学社官网源码",
+    "description": "本网站基于 VitePress + Vue 3 构建，自定义主题、粒子背景、响应式设计。",
+    "category": "代码项目",
+    "fileType": "GitHub",
+    "date": "2026-05-18",
+    "link": "https://github.com/example/turing-website"
+  },
+  {
+    "title": "ACM 竞赛模板库",
+    "description": "学社整理的标准算法模板：图论、动态规划、字符串、计算几何、数论，含注释和典型例题。",
+    "category": "代码项目",
+    "fileType": "ZIP",
+    "fileSize": "420KB",
+    "date": "2026-02-15",
+    "link": "https://pan.baidu.com/s/example5",
+    "code": "turs"
+  },
+  {
+    "title": "ICPC 历年真题精选（2019-2025）",
+    "description": "整理自 ICPC 亚洲区域赛和 World Finals 真题，含中文翻译和题解思路。",
+    "category": "竞赛资料",
+    "fileType": "PDF",
+    "fileSize": "12.4MB",
+    "date": "2025-12-01",
+    "link": "https://pan.baidu.com/s/example6",
+    "code": "turs"
+  },
+  {
+    "title": "蓝桥杯历年省赛真题 + 题解",
+    "description": "覆盖 C/C++、Java、Python 组，包含完整题解代码和解题思路分析。",
+    "category": "竞赛资料",
+    "fileType": "文件夹",
+    "fileSize": "45MB",
+    "date": "2025-11-10",
+    "link": "https://pan.baidu.com/s/example7",
+    "code": "turs"
+  },
+  {
+    "title": "Kaggle 入门指南 + 经典赛题复盘",
+    "description": "学社数据科学小组整理的 Kaggle 入门教程，包含 Titanic、House Prices 等经典赛题完整复盘。",
+    "category": "竞赛资料",
+    "fileType": "PDF + IPYNB",
+    "fileSize": "18.6MB",
+    "date": "2025-10-05",
+    "link": "https://pan.baidu.com/s/example8"
+  },
+  {
+    "title": "CS 自学指南（学社推荐书单）",
+    "description": "覆盖算法、操作系统、网络、编译原理、AI 五大方向，标注难度和推荐阅读顺序。",
+    "category": "学习资料",
+    "fileType": "PDF",
+    "fileSize": "1.1MB",
+    "date": "2026-01-20",
+    "link": "https://pan.baidu.com/s/example9"
+  },
+  {
+    "title": "Git 协作开发最佳实践",
+    "description": "面向新手的 Git 工作流指南：分支策略、Commit 规范、Code Review 流程、常见问题处理。",
+    "category": "学习资料",
+    "fileType": "PDF",
+    "fileSize": "2.8MB",
+    "date": "2026-03-01",
+    "link": "https://pan.baidu.com/s/example10"
+  },
+  {
+    "title": "LaTeX 学术写作模板",
+    "description": "适用于课程报告、毕业论文、学术海报的 LaTeX 模板合集，学社内部维护更新。",
+    "category": "学习资料",
+    "fileType": "ZIP",
+    "fileSize": "3.2MB",
+    "date": "2025-09-15",
+    "link": "https://pan.baidu.com/s/example11",
+    "code": "turs"
+  },
+  {
+    "title": "JVM 调优课件",
+    "description": "JVM 性能调优实战课件，涵盖 GC 策略、内存模型、JIT 编译、线程调优等核心内容。",
+    "category": "讲座讲义",
+    "fileType": "PDF",
+    "date": "2026-05-30",
+    "link": "https://pan.baidu.com/s/1bQorkzz7NU8eKpm9MDrmFg",
+    "code": "h9dn"
+  }
+]
