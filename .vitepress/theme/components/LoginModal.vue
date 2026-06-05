@@ -61,6 +61,51 @@
                   class="field-input"
                   placeholder="请再次输入密码"
                   :disabled="loading"
+                />
+              </label>
+
+              <!-- 注册时显示额外信息 -->
+              <label v-if="isRegister" class="form-field">
+                <span class="field-label">学院</span>
+                <input
+                  v-model="college"
+                  type="text"
+                  class="field-input"
+                  placeholder="请输入学院"
+                  :disabled="loading"
+                />
+              </label>
+
+              <label v-if="isRegister" class="form-field">
+                <span class="field-label">学号</span>
+                <input
+                  v-model="studentId"
+                  type="text"
+                  class="field-input"
+                  placeholder="请输入学号"
+                  :disabled="loading"
+                />
+              </label>
+
+              <label v-if="isRegister" class="form-field">
+                <span class="field-label">专业</span>
+                <input
+                  v-model="major"
+                  type="text"
+                  class="field-input"
+                  placeholder="请输入专业"
+                  :disabled="loading"
+                />
+              </label>
+
+              <label v-if="isRegister" class="form-field">
+                <span class="field-label">年级</span>
+                <input
+                  v-model="grade"
+                  type="text"
+                  class="field-input"
+                  placeholder="例如：2024级"
+                  :disabled="loading"
                   @keydown.enter="handleSubmit"
                 />
               </label>
@@ -164,6 +209,10 @@ const isRegister = ref(false)
 const username = ref('')
 const password = ref('')
 const confirmPassword = ref('')
+const college = ref('')
+const studentId = ref('')
+const major = ref('')
+const grade = ref('')
 const errorMsg = ref('')
 const successMsg = ref('')
 const loading = ref(false)
@@ -178,6 +227,7 @@ const newPwdConfirm = ref('')
 const canSubmit = computed(() => {
   if (!username.value.trim() || !password.value.trim()) return false
   if (isRegister.value && password.value !== confirmPassword.value) return false
+  if (isRegister.value && (!college.value.trim() || !studentId.value.trim() || !major.value.trim() || !grade.value.trim())) return false
   return true
 })
 
@@ -239,7 +289,12 @@ async function handleSubmit() {
   loading.value = true
 
   const result = isRegister.value
-    ? await auth.register(username.value.trim(), password.value.trim())
+    ? await auth.register(username.value.trim(), password.value.trim(), {
+        college: college.value.trim(),
+        studentId: studentId.value.trim(),
+        major: major.value.trim(),
+        grade: grade.value.trim()
+      })
     : await auth.login(username.value.trim(), password.value.trim())
 
   loading.value = false
@@ -253,6 +308,10 @@ async function handleSubmit() {
   username.value = ''
   password.value = ''
   confirmPassword.value = ''
+  college.value = ''
+  studentId.value = ''
+  major.value = ''
+  grade.value = ''
 
   setTimeout(() => close(), 1500)
 }

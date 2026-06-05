@@ -115,7 +115,7 @@ interface Question {
   replies: Reply[]
 }
 
-const API_BASE = 'http://localhost:8080/api/faqs'
+const API_BASE = 'http://192.168.2.120:8080/api/faqs'
 const STORAGE_KEY = 'turing-asked-questions'
 
 const emptyForm = () => ({

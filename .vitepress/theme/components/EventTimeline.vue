@@ -113,7 +113,7 @@ interface Registration {
 }
 
 const STORAGE_KEY = 'turing-event-registrations'
-const API_BASE = 'http://localhost:8080/api/events'
+const API_BASE = 'http://192.168.2.120:8080/api/events'
 
 const props = defineProps<{
   events: Event[]

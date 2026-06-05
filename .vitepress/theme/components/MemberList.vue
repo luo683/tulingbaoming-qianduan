@@ -260,7 +260,7 @@ async function loadData() {
   loading.value = true
   error.value = false
   try {
-    const res = await fetch('http://localhost:8080/api/members')
+    const res = await fetch('http://192.168.2.120:8080/api/members')
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data: ApiMember[] = await res.json()
 

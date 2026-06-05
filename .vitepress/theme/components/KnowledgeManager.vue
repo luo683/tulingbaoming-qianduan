@@ -127,7 +127,7 @@ interface KnowledgeDoc {
   updatedAt?: string
 }
 
-const API = 'http://localhost:8080/api/knowledge/admin/documents'
+const API = 'http://192.168.2.120:8080/api/knowledge/admin/documents'
 
 const documents = ref<KnowledgeDoc[]>([])
 const loading = ref(true)
@@ -202,7 +202,7 @@ async function testRag() {
   if (!ragQuery.value.trim()) return
   ragLoading.value = true
   try {
-    const res = await fetch(`http://localhost:8080/api/knowledge/search?q=${encodeURIComponent(ragQuery.value)}`)
+    const res = await fetch(`http://192.168.2.120:8080/api/knowledge/search?q=${encodeURIComponent(ragQuery.value)}`)
     ragResults.value = await res.json()
   } catch (e) {
     console.error('检索失败', e)

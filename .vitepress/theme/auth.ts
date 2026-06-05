@@ -12,7 +12,7 @@ const STORAGE_KEY = 'turing-user'
 const TOKEN_KEY = 'turing-token'
 
 // 后端 API 地址
-const API_BASE = 'http://localhost:8080/api/auth'
+const API_BASE = 'http://192.168.2.120:8080/api/auth'
 
 // SSR 安全：服务端渲染时无 localStorage
 const isBrowser = typeof window !== 'undefined'
@@ -73,12 +73,12 @@ export function useAuth() {
   }
 
   /** 调用后端注册 API */
-  async function register(username: string, password: string): Promise<{ ok: boolean; error?: string }> {
+  async function register(username: string, password: string, extra?: { college: string; studentId: string; major: string; grade: string }): Promise<{ ok: boolean; error?: string }> {
     try {
       const res = await fetch(`${API_BASE}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username.trim(), password }),
+        body: JSON.stringify({ username: username.trim(), password, ...extra }),
       })
       const data = await res.json()
 

@@ -78,7 +78,7 @@ interface Project {
   status?: string
 }
 
-const API_URL = 'http://localhost:8080/api/projects'
+const API_URL = 'http://192.168.2.120:8080/api/projects'
 
 const projects = ref<Project[]>([])
 const loading = ref(false)

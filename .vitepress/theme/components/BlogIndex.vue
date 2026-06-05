@@ -108,7 +108,7 @@ import { useAuth } from '../auth'
 const auth = useAuth()
 const props = defineProps<{ posts?: Post[] }>()
 
-const API_BASE = 'http://localhost:8080/api/blog/posts'
+const API_BASE = 'http://192.168.2.120:8080/api/blog/posts'
 
 // --- Reactive state ---
 const activeTag = ref<string | null>(null)

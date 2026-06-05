@@ -225,7 +225,7 @@ export interface Resource {
   _user?: boolean
 }
 
-const API_BASE = 'http://localhost:8080/api'
+const API_BASE = 'http://192.168.2.120:8080/api'
 const STORAGE_KEY = 'turing-uploaded-resources'
 const LIKES_KEY = 'turing-resource-likes'
 const USER_ID_KEY = 'turing-user-id'

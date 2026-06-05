@@ -64,7 +64,7 @@ import { gsap } from 'gsap'
 
 // ============ 配置 ============
 // 后端 API 地址（开发时可替换）
-const API_BASE_URL = 'http://localhost:8080/api/chat'
+const API_BASE_URL = 'http://192.168.2.120:8080/api/chat'
 
 // ============ 状态 ============
 const chatMessages = ref([])
