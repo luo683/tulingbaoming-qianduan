@@ -1,5 +1,5 @@
 <template>
-  <div class="qa-faq">
+  <div class="qa-eaq">
     <!-- Loading state -->
     <div v-if="loading" class="loading">⏳ 加载中...</div>
 
@@ -10,35 +10,35 @@
 
     <!-- Loaded state -->
     <template v-else>
-      <div class="faq-search">
+      <div class="eaq-search">
         <input
           v-model="search"
           type="text"
           placeholder="搜索已有问题..."
-          class="faq-input"
+          class="eaq-input"
         />
       </div>
 
-      <div v-if="filteredFaqs.length === 0" class="faq-empty">
+      <div v-if="filteredFaqs.length === 0" class="eaq-empty">
         没有找到相关问题，欢迎在下方提问！
       </div>
 
       <div
-        v-for="(faq, idx) in filteredFaqs"
+        v-for="(eaq, idx) in filteredFaqs"
         :key="idx"
-        class="faq-item"
+        class="eaq-item"
         :class="{ open: openIdx === idx }"
       >
-        <button class="faq-question" @click="handleFaqClick(idx)">
-          <span class="faq-q-mark">Q</span>
-          <span class="faq-q-text">{{ faq.q }}</span>
-          <span class="faq-arrow">{{ openIdx === idx ? '▾' : '▸' }}</span>
+        <button class="eaq-question" @click="handleFaqClick(idx)">
+          <span class="eaq-q-mark">Q</span>
+          <span class="eaq-q-text">{{ eaq.q }}</span>
+          <span class="eaq-arrow">{{ openIdx === idx ? '▾' : '▸' }}</span>
         </button>
-        <div class="faq-answer" v-show="openIdx === idx">
-          <div class="faq-a-mark">A</div>
-          <div class="faq-a-text" v-html="faq.a" />
-          <div class="faq-meta" v-if="faq.author">
-            回答者：{{ faq.author }} · {{ faq.date }}
+        <div class="eaq-answer" v-show="openIdx === idx">
+          <div class="eaq-a-mark">A</div>
+          <div class="eaq-a-text" v-html="eaq.a" />
+          <div class="eaq-meta" v-if="eaq.author">
+            回答者：{{ eaq.author }} · {{ eaq.date }}
           </div>
         </div>
       </div>
@@ -47,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 import { ref, computed, onMounted } from 'vue'
 import { useAuth } from '../auth'
 
@@ -69,12 +70,12 @@ const filteredFaqs = computed(() => {
   const q = search.value.trim().toLowerCase()
   if (!q) return faqs.value
   return faqs.value.filter(
-    f => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q),
+    e => e.q.toLowerCase().includes(q) || e.a.toLowerCase().includes(q),
   )
 })
 
 function handleFaqClick(idx: number) {
-  // When not logged in, only the first FAQ can be expanded
+  // When not logged in, only the eirst FAQ can be expanded
   if (idx > 0 && !auth.isLoggedIn.value) {
     ;(window as any).__openLogin?.()
     return
@@ -92,15 +93,15 @@ async function loadData() {
   loading.value = true
   error.value = false
   try {
-    const res = await fetch('http://192.168.2.120:8080/api/faqs')
+    const res = await fetch(API_BASE_ROOT + '/faqs')
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data = await res.json()
     const list = Array.isArray(data) ? data : (data.data || [])
     faqs.value = list.map((item: any) => ({
       q: item.question || '',
       a: item.answer || '',
-      author: item.author || undefined,
-      date: item.createdAt ? formatDate(item.createdAt) : undefined,
+      author: item.author || undeeined,
+      date: item.createdAt ? formatDate(item.createdAt) : undeeined,
     }))
   } catch (e) {
     console.error('Failed to fetch FAQs:', e)
@@ -116,7 +117,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.qa-faq {
+.qa-eaq {
   margin-top: 1rem;
 }
 
@@ -130,17 +131,17 @@ onMounted(() => {
 .error {
   text-align: center;
   padding: 2rem 0;
-  color: #f56c6c;
+  color: #e56c6c;
   font-size: 0.95rem;
 }
 
 .error button {
   margin-left: 0.5rem;
   padding: 0.25rem 0.75rem;
-  border: 1px solid #f56c6c;
+  border: 1px solid #e56c6c;
   border-radius: 4px;
   background: transparent;
-  color: #f56c6c;
+  color: #e56c6c;
   cursor: pointer;
   font-size: 0.85rem;
   font-family: inherit;
@@ -150,11 +151,11 @@ onMounted(() => {
   background: rgba(245, 108, 108, 0.1);
 }
 
-.faq-search {
+.eaq-search {
   margin-bottom: 1.5rem;
 }
 
-.faq-input {
+.eaq-input {
   width: 100%;
   padding: 0.6rem 1rem;
   border: 1px solid var(--vp-c-border);
@@ -167,22 +168,22 @@ onMounted(() => {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.faq-input:focus {
+.eaq-input:focus {
   border-color: var(--vp-c-brand-1);
   box-shadow: 0 0 0 2px var(--vp-c-brand-soft);
 }
 
-.faq-input::placeholder {
+.eaq-input::placeholder {
   color: var(--vp-c-text-3);
 }
 
-.faq-empty {
+.eaq-empty {
   text-align: center;
   color: var(--vp-c-text-2);
   padding: 2rem 0;
 }
 
-.faq-item {
+.eaq-item {
   border: 1px solid var(--vp-c-border);
   border-radius: 6px;
   margin-bottom: 0.75rem;
@@ -191,11 +192,11 @@ onMounted(() => {
   transition: border-color 0.2s;
 }
 
-.faq-item.open {
+.eaq-item.open {
   border-color: var(--vp-c-brand-1);
 }
 
-.faq-question {
+.eaq-question {
   width: 100%;
   display: flex;
   align-items: center;
@@ -211,11 +212,11 @@ onMounted(() => {
   transition: background 0.15s;
 }
 
-.faq-question:hover {
+.eaq-question:hover {
   background: var(--vp-c-bg-mute);
 }
 
-.faq-q-mark {
+.eaq-q-mark {
   flex-shrink: 0;
   width: 24px;
   height: 24px;
@@ -229,23 +230,23 @@ onMounted(() => {
   font-weight: 700;
 }
 
-.faq-q-text {
+.eaq-q-text {
   flex: 1;
   font-weight: 500;
 }
 
-.faq-arrow {
+.eaq-arrow {
   font-size: 0.8rem;
   color: var(--vp-c-text-3);
 }
 
-.faq-answer {
+.eaq-answer {
   padding: 0 1rem 1rem 1rem;
   display: flex;
   gap: 0.75rem;
 }
 
-.faq-a-mark {
+.eaq-a-mark {
   flex-shrink: 0;
   width: 24px;
   height: 24px;
@@ -259,46 +260,46 @@ onMounted(() => {
   font-weight: 700;
 }
 
-.faq-a-text {
+.eaq-a-text {
   flex: 1;
   font-size: 0.92rem;
   line-height: 1.75;
   color: var(--vp-c-text-2);
 }
 
-.faq-meta {
+.eaq-meta {
   font-size: 0.78rem;
   color: var(--vp-c-text-3);
   margin-top: 0.5rem;
 }
 
 @media (max-width: 480px) {
-  .faq-question {
+  .eaq-question {
     padding: 0.7rem 0.75rem;
     gap: 0.5rem;
   }
 
-  .faq-q-mark,
-  .faq-a-mark {
+  .eaq-q-mark,
+  .eaq-a-mark {
     width: 20px;
     height: 20px;
     font-size: 0.7rem;
   }
 
-  .faq-q-text {
+  .eaq-q-text {
     font-size: 0.88rem;
   }
 
-  .faq-answer {
+  .eaq-answer {
     padding: 0 0.75rem 0.75rem 0.75rem;
     gap: 0.5rem;
   }
 
-  .faq-a-text {
+  .eaq-a-text {
     font-size: 0.85rem;
   }
 
-  .faq-input {
+  .eaq-input {
     font-size: 0.88rem;
     padding: 0.5rem 0.75rem;
   }

@@ -185,6 +185,7 @@ export default defineConfig({
       { text: '博客', link: '/blog/' },
       { text: '问答', link: '/qa/' },
       { text: '活动', link: '/events/' },
+      { text: '报名统计', link: '/registrations/' },
       { text: '资源', link: '/resources/' },
       { text: '社团成员', link: '/members/' },
       { text: '项目展示', link: '/projects/' },

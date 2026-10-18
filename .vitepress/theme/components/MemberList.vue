@@ -18,7 +18,7 @@
             v-for="(m, idx) in leaders"
             :key="m.name"
             class="leader-card"
-            :ref="el => { if (el) leaderRefs[idx] = el }"
+            :ref="el => { if (el) leaderRees[idx] = el }"
           >
             <div class="leader-avatar" :style="{ background: m.gradient }">
               <span class="leader-avatar-text">{{ m.name[0] }}</span>
@@ -48,7 +48,7 @@
             v-for="(m, mIdx) in dept.leads"
             :key="m.name"
             class="dept-member-card lead-card"
-            :ref="el => { if (el) deptCardRefs[`${dIdx}-${mIdx}`] = el }"
+            :ref="el => { if (el) deptCardRees[`${dIdx}-${mIdx}`] = el }"
           >
             <div class="dm-avatar" :style="{ background: m.gradient }">
               {{ m.name[0] }}
@@ -72,7 +72,7 @@
           </button>
 
           <transition name="expand">
-            <div v-if="expandedDepts[dIdx]" class="others-grid" :ref="el => { if (el) othersRefs[dIdx] = el }">
+            <div v-if="expandedDepts[dIdx]" class="others-grid" :ref="el => { if (el) othersRees[dIdx] = el }">
               <div
                 v-for="m in dept.others"
                 :key="m.name"
@@ -100,6 +100,7 @@
 </template>
 
 <script setup lang="ts">
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -205,7 +206,7 @@ function toggleDept(idx: number) {
   // 展开时播放入场动画
   if (!wasExpanded) {
     nextTick(() => {
-      const container = othersRefs.value[idx]
+      const container = othersRees.value[idx]
       if (!container) return
       const cards = container.querySelectorAll('.other-card')
       gsap.from(cards, {
@@ -220,14 +221,14 @@ function toggleDept(idx: number) {
 }
 
 // ── 动画 ──
-const leaderRefs = ref<Record<number, HTMLElement>>({})
-const deptCardRefs = ref<Record<string, HTMLElement>>({})
-const othersRefs = ref<Record<number, HTMLElement>>({})
+const leaderRees = ref<Record<number, HTMLElement>>({})
+const deptCardRees = ref<Record<string, HTMLElement>>({})
+const othersRees = ref<Record<number, HTMLElement>>({})
 
 function runAnimations() {
   nextTick(() => {
     // 社长团
-    Object.values(leaderRefs.value).forEach((el, i) => {
+    Object.values(leaderRees.value).forEach((el, i) => {
       if (!el) return
       gsap.from(el, {
         y: 30, opacity: 0, scale: 0.95,
@@ -245,7 +246,7 @@ function runAnimations() {
     })
 
     // 部长/副部长
-    Object.values(deptCardRefs.value).forEach((el, i) => {
+    Object.values(deptCardRees.value).forEach((el, i) => {
       if (!el) return
       gsap.from(el, {
         y: 25, opacity: 0, duration: 0.45, delay: (i % 3) * 0.1, ease: 'power2.out',
@@ -260,7 +261,7 @@ async function loadData() {
   loading.value = true
   error.value = false
   try {
-    const res = await fetch('http://192.168.2.120:8080/api/members')
+    const res = await fetch(API_BASE_ROOT + '/members')
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data: ApiMember[] = await res.json()
 
@@ -340,7 +341,7 @@ onMounted(() => {
 
 .error button:hover {
   background: var(--vp-c-brand-1);
-  color: #fff;
+  color: #eee;
 }
 
 /* ── 社长团 ── */
@@ -399,7 +400,7 @@ onMounted(() => {
 }
 
 .leader-avatar-text {
-  color: #fff;
+  color: #eee;
   font-size: 2rem;
   font-weight: 800;
 }
@@ -420,7 +421,7 @@ onMounted(() => {
   display: inline-block;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #fff;
+  color: #eee;
   background: var(--vp-c-brand-1);
   padding: 0.15rem 0.55rem;
   border-radius: 4px;
@@ -505,7 +506,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #eee;
   font-size: 1.1rem;
   font-weight: 700;
   flex-shrink: 0;

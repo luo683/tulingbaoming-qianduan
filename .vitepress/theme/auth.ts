@@ -1,8 +1,10 @@
 import { ref, computed } from 'vue'
+import { API_BASE as API_BASE_ROOT } from './api/config'
 
 export type Role = 'admin' | 'user' | null
 
 export interface User {
+  id: number | null
   username: string
   role: Role
   avatar: string
@@ -12,7 +14,10 @@ const STORAGE_KEY = 'turing-user'
 const TOKEN_KEY = 'turing-token'
 
 // 后端 API 地址
-const API_BASE = 'http://192.168.2.120:8080/api/auth'
+const API_BASE = API_BASE_ROOT
+
+/** 认证相关接口的路径前缀，与后端 AuthController 的 @RequestMapping("/api/auth") 保持一致 */
+const AUTH_BASE = `${API_BASE}/auth`
 
 // SSR 安全：服务端渲染时无 localStorage
 const isBrowser = typeof window !== 'undefined'
@@ -49,7 +54,7 @@ export function useAuth() {
   /** 调用后端登录 API */
   async function login(username: string, password: string): Promise<{ ok: boolean; error?: string }> {
     try {
-      const res = await fetch(`${API_BASE}/login`, {
+      const res = await fetch(`${AUTH_BASE}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim(), password }),
@@ -61,6 +66,7 @@ export function useAuth() {
       }
 
       saveUser({
+        id: data.id ?? null,
         username: data.username,
         role: data.role,
         avatar: data.avatar,
@@ -75,7 +81,7 @@ export function useAuth() {
   /** 调用后端注册 API */
   async function register(username: string, password: string, extra?: { college: string; studentId: string; major: string; grade: string }): Promise<{ ok: boolean; error?: string }> {
     try {
-      const res = await fetch(`${API_BASE}/register`, {
+      const res = await fetch(`${AUTH_BASE}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim(), password, ...extra }),
@@ -87,6 +93,7 @@ export function useAuth() {
       }
 
       saveUser({
+        id: data.id ?? null,
         username: data.username,
         role: data.role,
         avatar: data.avatar,
@@ -102,7 +109,7 @@ export function useAuth() {
   async function changePassword(oldPassword: string, newPassword: string): Promise<{ ok: boolean; error?: string }> {
     if (!currentUser.value) return { ok: false, error: '请先登录' }
     try {
-      const res = await fetch(`${API_BASE}/change-password`, {
+      const res = await fetch(`${AUTH_BASE}/change-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

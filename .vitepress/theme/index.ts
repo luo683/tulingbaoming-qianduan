@@ -21,6 +21,8 @@ import AdvisorSection from './components/AdvisorSection.vue'
 import AboutTimeline from './components/AboutTimeline.vue'
 import TagCloud from './components/TagCloud.vue'
 import FeaturedPostBanner from './components/FeaturedPostBanner.vue'
+import EventRegistrationButton from './components/EventRegistrationButton.vue'
+import EventRegistrationStats from './components/EventRegistrationStats.vue'
 import './custom.css'
 
 // GSAP 全局注册
@@ -51,5 +53,7 @@ export default {
     app.component('AboutTimeline', AboutTimeline)
     app.component('TagCloud', TagCloud)
     app.component('FeaturedPostBanner', FeaturedPostBanner)
+    app.component('EventRegistrationButton', EventRegistrationButton)
+    app.component('EventRegistrationStats', EventRegistrationStats)
   },
 }

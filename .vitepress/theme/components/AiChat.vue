@@ -61,10 +61,11 @@
 <script setup>
 import { ref, nextTick, onMounted, onUnmounted, watch } from 'vue'
 import { gsap } from 'gsap'
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 
 // ============ 配置 ============
 // 后端 API 地址（开发时可替换）
-const API_BASE_URL = 'http://192.168.2.120:8080/api/chat'
+const API_BASE_URL = API_BASE_ROOT
 
 // ============ 状态 ============
 const chatMessages = ref([])

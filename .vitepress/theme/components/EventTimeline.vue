@@ -88,6 +88,7 @@ import { ref, computed, onMounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useAuth } from '../auth'
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 
 const auth = useAuth()
 
@@ -113,7 +114,7 @@ interface Registration {
 }
 
 const STORAGE_KEY = 'turing-event-registrations'
-const API_BASE = 'http://192.168.2.120:8080/api/events'
+const API_BASE = API_BASE_ROOT
 
 const props = defineProps<{
   events: Event[]

@@ -208,6 +208,7 @@ import { ref, computed, onMounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useAuth } from '../auth'
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 
 const auth = useAuth()
 
@@ -225,7 +226,7 @@ export interface Resource {
   _user?: boolean
 }
 
-const API_BASE = 'http://192.168.2.120:8080/api'
+const API_BASE = API_BASE_ROOT
 const STORAGE_KEY = 'turing-uploaded-resources'
 const LIKES_KEY = 'turing-resource-likes'
 const USER_ID_KEY = 'turing-user-id'
@@ -252,7 +253,12 @@ const emptyForm = () => ({
 const form = ref(emptyForm())
 
 // ===== User ID =====
+// 已登录用户使用后端返回的真实 id；未登录时回退到本地匿名标识（保证点赞/上传可用）
 function getUserId(): number {
+  const loggedIn = auth.user.value
+  if (loggedIn && typeof loggedIn.id === 'number') {
+    return loggedIn.id
+  }
   const stored = localStorage.getItem(USER_ID_KEY)
   if (stored) return parseInt(stored, 10)
   const id = Date.now()

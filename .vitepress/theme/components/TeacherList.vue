@@ -48,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 import { ref, onMounted } from 'vue'
 
 interface Teacher {
@@ -75,11 +76,11 @@ interface ApiTeacher {
 
 const GRADIENTS = [
   'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-  'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
-  'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
-  'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-  'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+  'linear-gradient(135deg, #e093eb 0%, #e5576c 100%)',
+  'linear-gradient(135deg, #a18cd1 0%, #ebc2eb 100%)',
+  'linear-gradient(135deg, #eeecd2 0%, #ecb69e 100%)',
+  'linear-gradient(135deg, #4eacee 0%, #00e2ee 100%)',
+  'linear-gradient(135deg, #43e97b 0%, #38e9d7 100%)',
 ]
 
 const DEPT_ICONS: Record<string, string> = {
@@ -104,7 +105,7 @@ async function loadData() {
   loading.value = true
   error.value = false
   try {
-    const res = await fetch('http://192.168.2.120:8080/api/teachers')
+    const res = await fetch(API_BASE_ROOT + '/teachers')
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data: ApiTeacher[] = await res.json()
 
@@ -183,7 +184,7 @@ onMounted(() => {
 
 .error button:hover {
   background: var(--vp-c-brand-1);
-  color: #fff;
+  color: #eee;
 }
 
 /* ── 系别区块 ── */
@@ -263,7 +264,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #eee;
   font-size: 0.95rem;
   font-weight: 700;
   flex-shrink: 0;

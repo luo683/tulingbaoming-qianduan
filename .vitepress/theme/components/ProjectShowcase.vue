@@ -59,6 +59,7 @@ import { ref, computed, onMounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useAuth } from '../auth'
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 
 const auth = useAuth()
 
@@ -78,7 +79,7 @@ interface Project {
   status?: string
 }
 
-const API_URL = 'http://192.168.2.120:8080/api/projects'
+const API_URL = API_BASE_ROOT
 
 const projects = ref<Project[]>([])
 const loading = ref(false)

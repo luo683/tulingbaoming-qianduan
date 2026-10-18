@@ -54,8 +54,9 @@ import { posts } from '../posts'
 import type { Post } from '../posts'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 
-const API_BASE = 'http://192.168.2.120:8080/api/blog/posts'
+const API_BASE = API_BASE_ROOT
 
 const submittedPosts = ref<any[]>([])
 const apiPosts = ref<any[]>([])

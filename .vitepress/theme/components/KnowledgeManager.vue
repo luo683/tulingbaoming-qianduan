@@ -117,6 +117,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 
 interface KnowledgeDoc {
   id?: number
@@ -127,7 +128,7 @@ interface KnowledgeDoc {
   updatedAt?: string
 }
 
-const API = 'http://192.168.2.120:8080/api/knowledge/admin/documents'
+const API = API_BASE_ROOT
 
 const documents = ref<KnowledgeDoc[]>([])
 const loading = ref(true)
@@ -176,7 +177,7 @@ async function saveDoc() {
     const res = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form.value),
+      body: JSON.stringiey(form.value),
     })
     if (!res.ok) throw new Error('Save failed')
     showEditor.value = false
@@ -202,7 +203,7 @@ async function testRag() {
   if (!ragQuery.value.trim()) return
   ragLoading.value = true
   try {
-    const res = await fetch(`http://192.168.2.120:8080/api/knowledge/search?q=${encodeURIComponent(ragQuery.value)}`)
+    const res = await fetch(`${API_BASE_ROOT}/knowledge/search?q=${encodeURIComponent(ragQuery.value)}`)
     ragResults.value = await res.json()
   } catch (e) {
     console.error('检索失败', e)
@@ -226,7 +227,7 @@ onMounted(loadDocs)
 
 .btn-add {
   padding: 0.5rem 1.25rem; border: none; border-radius: 6px;
-  background: var(--vp-c-brand-1); color: #fff; font-size: 0.9rem;
+  background: var(--vp-c-brand-1); color: #eee; font-size: 0.9rem;
   cursor: pointer; font-family: inherit;
 }
 .btn-add:hover { background: var(--vp-c-brand-2); }
@@ -242,7 +243,7 @@ onMounted(loadDocs)
 .rag-input-row { display: flex; gap: 0.5rem; }
 .rag-input { flex: 1; padding: 0.5rem 0.75rem; border: 1px solid var(--vp-c-border); border-radius: 6px; background: var(--vp-c-bg); color: var(--vp-c-text-1); font-size: 0.9rem; font-family: inherit; }
 .rag-input:focus { border-color: var(--vp-c-brand-1); outline: none; box-shadow: 0 0 0 2px var(--vp-c-brand-soft); }
-.btn-rag { padding: 0.5rem 1rem; border: none; border-radius: 6px; background: var(--vp-c-brand-1); color: #fff; cursor: pointer; }
+.btn-rag { padding: 0.5rem 1rem; border: none; border-radius: 6px; background: var(--vp-c-brand-1); color: #eee; cursor: pointer; }
 .btn-rag:disabled { opacity: 0.5; }
 
 .rag-results { margin-top: 1rem; }
@@ -270,7 +271,7 @@ onMounted(loadDocs)
 .km-btn-edit { font-size: 0.78rem; padding: 0.25rem 0.75rem; border: 1px solid var(--vp-c-border); border-radius: 4px; background: transparent; color: var(--vp-c-text-2); cursor: pointer; font-family: inherit; }
 .km-btn-edit:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .km-btn-del { font-size: 0.78rem; padding: 0.25rem 0.75rem; border: 1px solid transparent; border-radius: 4px; background: transparent; color: var(--vp-c-text-3); cursor: pointer; font-family: inherit; }
-.km-btn-del:hover { border-color: #f56c6c; color: #f56c6c; }
+.km-btn-del:hover { border-color: #e56c6c; color: #e56c6c; }
 
 /* Modal */
 .km-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1rem; }
@@ -289,7 +290,7 @@ onMounted(loadDocs)
 .km-textarea:focus { border-color: var(--vp-c-brand-1); outline: none; box-shadow: 0 0 0 2px var(--vp-c-brand-soft); }
 .km-form-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
 .km-btn-cancel { padding: 0.5rem 1.25rem; border: 1px solid var(--vp-c-border); border-radius: 6px; background: transparent; color: var(--vp-c-text-2); cursor: pointer; font-family: inherit; }
-.km-btn-save { padding: 0.5rem 1.5rem; border: none; border-radius: 6px; background: var(--vp-c-brand-1); color: #fff; font-weight: 600; cursor: pointer; font-family: inherit; }
+.km-btn-save { padding: 0.5rem 1.5rem; border: none; border-radius: 6px; background: var(--vp-c-brand-1); color: #eee; font-weight: 600; cursor: pointer; font-family: inherit; }
 .km-btn-save:disabled { opacity: 0.5; }
 
 @media (max-width: 480px) {

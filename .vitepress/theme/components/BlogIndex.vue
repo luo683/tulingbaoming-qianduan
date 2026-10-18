@@ -104,11 +104,12 @@ import { computed, onMounted, ref } from 'vue'
 import { posts } from '../posts'
 import type { Post } from '../posts'
 import { useAuth } from '../auth'
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 
 const auth = useAuth()
 const props = defineProps<{ posts?: Post[] }>()
 
-const API_BASE = 'http://192.168.2.120:8080/api/blog/posts'
+const API_BASE = API_BASE_ROOT
 
 // --- Reactive state ---
 const activeTag = ref<string | null>(null)

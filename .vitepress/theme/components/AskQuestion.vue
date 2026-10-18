@@ -94,6 +94,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { useAuth } from '../auth'
+import { API_BASE as API_BASE_ROOT } from '../api/config'
 
 const auth = useAuth()
 
@@ -115,7 +116,7 @@ interface Question {
   replies: Reply[]
 }
 
-const API_BASE = 'http://192.168.2.120:8080/api/faqs'
+const API_BASE = API_BASE_ROOT
 const STORAGE_KEY = 'turing-asked-questions'
 
 const emptyForm = () => ({
@@ -150,7 +151,7 @@ function initReplyForms() {
 
 async function fetchRepliesForQuestion(q: Question) {
   try {
-    const rRes = await fetch(`${API_BASE}/questions/${q._id}/replies`)
+    const rRes = await fetch(`${API_BASE}/faqs/questions/${q._id}/replies`)
     if (!rRes.ok) return
     const rData = await rRes.json()
     const replies = Array.isArray(rData) ? rData : (rData.data || [])
@@ -171,7 +172,7 @@ async function loadData() {
   let apiSucceeded = false
 
   try {
-    const res = await fetch(`${API_BASE}/questions`)
+    const res = await fetch(`${API_BASE}/faqs/questions`)
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data = await res.json()
     const list = Array.isArray(data) ? data : (data.data || [])
@@ -229,7 +230,7 @@ async function submitQuestion() {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/ask`, {
+    const res = await fetch(`${API_BASE}/faqs/ask`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -291,7 +292,7 @@ async function submitReply(questionId: string) {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/questions/${questionId}/reply`, {
+    const res = await fetch(`${API_BASE}/faqs/questions/${questionId}/reply`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
