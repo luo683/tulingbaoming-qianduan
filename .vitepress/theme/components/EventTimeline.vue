@@ -8,10 +8,11 @@
 
     <!-- Content -->
     <template v-else>
+      <p v-if="registrationError" class="error" role="alert">{{ registrationError }}</p>
       <!-- Upcoming highlight -->
       <div v-if="upcoming.length > 0" class="upcoming-section">
         <h2 class="section-title">即将到来</h2>
-        <div v-for="ev in upcoming" :key="ev.title" class="upcoming-card">
+        <div v-for="ev in upcoming" :key="ev.id" :id="`event-${ev.id}`" class="upcoming-card">
           <div class="upcoming-date">
             <span class="date-day">{{ ev.day }}</span>
             <span class="date-month">{{ ev.month }}</span>
@@ -37,15 +38,15 @@
               </div>
               <!-- When logged in: show normal registration -->
               <template v-else>
-                <template v-if="!isRegistered(ev.title)">
+                <span v-if="stats[ev.id]" class="reg-count">{{ stats[ev.id].totalRegistered }} 人已报名</span>
+                <template v-if="!isRegistered(ev.id)">
                   <button class="btn-register" @click="toggleForm(ev.title)">
                     {{ showForm === ev.title ? '收起' : '立即报名' }}
                   </button>
-                  <span class="reg-count">{{ getRegistrations(ev.title).length }} 人已报名</span>
                 </template>
                 <template v-else>
                   <span class="reg-done">✓ 已报名</span>
-                  <button class="btn-cancel-reg" @click="cancelRegistration(ev.title)">取消报名</button>
+                  <button class="btn-cancel-reg" :disabled="submitting" @click="cancelRegistration(ev.id)">取消报名</button>
                 </template>
 
                 <!-- Registration form -->
@@ -56,7 +57,7 @@
                     <input v-model="regForm.email" type="email" placeholder="邮箱 *" class="reg-input" />
                   </div>
                   <div class="reg-actions">
-                    <button class="btn-submit-reg" @click="submitRegistration(ev)" :disabled="!canSubmit">确认报名</button>
+                    <button class="btn-submit-reg" @click="submitRegistration(ev)" :disabled="!canSubmit || submitting">确认报名</button>
                   </div>
                 </div>
               </template>
@@ -84,16 +85,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useAuth } from '../auth'
 import { API_BASE as API_BASE_ROOT } from '../api/config'
 
+import * as regApi from '../api/registration'
+import type { Registration, RegistrationStats } from '../api/registration'
+
 const auth = useAuth()
 
 interface Event {
-  id?: string | number
+  id: number
   title: string
   description: string
   date: string
@@ -105,35 +109,22 @@ interface Event {
   status?: 'open' | 'soon' | 'past'
 }
 
-interface Registration {
-  eventTitle: string
-  name: string
-  phone: string
-  email: string
-  date: string
-}
-
-const STORAGE_KEY = 'turing-event-registrations'
-const API_BASE = API_BASE_ROOT
-
-const props = defineProps<{
-  events: Event[]
-}>()
+const API_BASE = `${API_BASE_ROOT}/events`
 
 const apiEvents = ref<Event[]>([])
 const loading = ref(false)
 const error = ref(false)
 
-const allEvents = computed(() => {
-  if (props.events && props.events.length > 0) return props.events
-  return apiEvents.value
-})
+const allEvents = computed(() => apiEvents.value)
 
 const upcoming = computed(() => allEvents.value.filter(e => e.status === 'open' || e.status === 'soon'))
 const pastEvents = computed(() => allEvents.value.filter(e => e.status === 'past'))
 
 const showForm = ref<string | null>(null)
 const registrations = ref<Registration[]>([])
+const stats = ref<Record<number, RegistrationStats>>({})
+const submitting = ref(false)
+const registrationError = ref('')
 const regForm = ref({ name: '', phone: '', email: '' })
 
 const canSubmit = computed(() => regForm.value.name.trim() && regForm.value.phone.trim() && regForm.value.email.trim())
@@ -143,20 +134,24 @@ function openLoginIfNeeded() {
   ;(window as any).__openLogin?.()
 }
 
-onMounted(() => {
-  // Load saved registrations from localStorage
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) registrations.value = JSON.parse(stored)
-  } catch { /* ignore */ }
+onMounted(loadEvents)
 
-  // Use prop data if available, otherwise fetch from API
-  if (props.events && props.events.length > 0) {
-    runAnimations()
-  } else {
-    loadEvents()
-  }
+watch(() => auth.user.value?.id, () => {
+  registrations.value = []
+  refreshRegistrations()
 })
+
+async function refreshRegistrations() {
+  const userId = auth.user.value?.id
+  try {
+    const mine = userId != null ? await regApi.getMyRegistrations(userId) : []
+    if (userId === auth.user.value?.id) registrations.value = mine
+    const counts = await Promise.all(upcoming.value.map(ev => regApi.getRegistrationStats(ev.id)))
+    stats.value = Object.fromEntries(counts.map(stat => [stat.eventId, stat]))
+  } catch (e) {
+    registrationError.value = e instanceof Error ? e.message : '加载报名数据失败'
+  }
+}
 
 function runAnimations() {
   nextTick(() => {
@@ -189,7 +184,15 @@ async function loadEvents() {
     const res = await fetch(API_BASE)
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data = await res.json()
-    apiEvents.value = Array.isArray(data) ? data : (data.data || data.events || [])
+    apiEvents.value = data.map((event: any) => ({
+      ...event,
+      date: event.eventDate,
+      dateStr: event.eventDate,
+      day: event.eventDate?.slice(8, 10) || '',
+      month: event.eventDate ? `${Number(event.eventDate.slice(5, 7))}月` : '',
+      time: event.eventTime,
+    }))
+    await refreshRegistrations()
     runAnimations()
   } catch {
     error.value = true
@@ -198,16 +201,8 @@ async function loadEvents() {
   }
 }
 
-function persist() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(registrations.value))
-}
-
-function isRegistered(eventTitle: string) {
-  return registrations.value.some(r => r.eventTitle === eventTitle)
-}
-
-function getRegistrations(eventTitle: string) {
-  return registrations.value.filter(r => r.eventTitle === eventTitle)
+function isRegistered(eventId: number) {
+  return registrations.value.some(r => r.eventId === eventId && r.status !== 'cancelled')
 }
 
 function toggleForm(eventTitle: string) {
@@ -216,49 +211,47 @@ function toggleForm(eventTitle: string) {
 }
 
 async function submitRegistration(ev: Event) {
-  if (!canSubmit.value) return
-  if (!auth.isLoggedIn.value) {
-    ;(window as any).__openLogin?.()
+  if (!canSubmit.value || submitting.value) return
+  const userId = auth.user.value?.id
+  if (userId == null) {
+    registrationError.value = '请先登录；若已登录，请退出后重新登录'
+    openLoginIfNeeded()
     return
   }
 
-  const payload = {
-    name: regForm.value.name.trim(),
-    phone: regForm.value.phone.trim(),
-    email: regForm.value.email.trim(),
-  }
-
-  const eventId = ev.id || ev.title
-
-  // Try API first
+  submitting.value = true
+  registrationError.value = ''
   try {
-    const res = await fetch(`${API_BASE}/${eventId}/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+    const saved = await regApi.registerForEvent(ev.id, userId, {
+      realName: regForm.value.name.trim(),
+      phone: regForm.value.phone.trim(),
+      email: regForm.value.email.trim(),
     })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  } catch {
-    // API failed — fall back to localStorage
+    registrations.value = [saved, ...registrations.value.filter(r => r.eventId !== ev.id)]
+    showForm.value = null
+    regForm.value = { name: '', phone: '', email: '' }
+    await refreshRegistrations()
+  } catch (e) {
+    registrationError.value = e instanceof Error ? e.message : '报名失败，请重试'
+  } finally {
+    submitting.value = false
   }
-
-  // Always save locally (works even when API succeeds, as local cache)
-  const now = new Date()
-  registrations.value.push({
-    eventTitle: ev.title,
-    name: payload.name,
-    phone: payload.phone,
-    email: payload.email,
-    date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
-  })
-  persist()
-  showForm.value = null
-  regForm.value = { name: '', phone: '', email: '' }
 }
 
-function cancelRegistration(eventTitle: string) {
-  registrations.value = registrations.value.filter(r => r.eventTitle !== eventTitle)
-  persist()
+async function cancelRegistration(eventId: number) {
+  const userId = auth.user.value?.id
+  if (userId == null || submitting.value) return
+  submitting.value = true
+  registrationError.value = ''
+  try {
+    await regApi.cancelRegistration(eventId, userId)
+    registrations.value = registrations.value.filter(r => r.eventId !== eventId)
+    await refreshRegistrations()
+  } catch (e) {
+    registrationError.value = e instanceof Error ? e.message : '取消失败，请重试'
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 

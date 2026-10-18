@@ -6,7 +6,6 @@ description: 图灵学社活动日历 — 技术讲座、Workshop、Hackathon、
 
 <script setup>
 import EventTimeline from '../.vitepress/theme/components/EventTimeline.vue'
-import events from '../data/events.json'
 </script>
 
 # 📅 活动日历
@@ -15,4 +14,4 @@ import events from '../data/events.json'
 
 ---
 
-<EventTimeline :events="events" />
+<EventTimeline />

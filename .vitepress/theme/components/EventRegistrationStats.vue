@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { API_BASE as API_BASE_ROOT } from '../api/config'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuth } from '../auth'
 
 const { isAdmin } = useAuth()
@@ -18,18 +18,20 @@ interface EventWithStats extends Event {
     totalRegistered: number
     totalAttended: number
     totalCancelled: number
-    isFull: boolean
+    full: boolean
   }
 }
 
 const events = ref<EventWithStats[]>([])
 const loading = ref(false)
 
-onMounted(async () => {
+async function loadStats() {
+  if (loading.value) return
   loading.value = true
   try {
     // 1. 获取所有活动
     const res = await fetch(API_BASE_ROOT + '/events')
+    if (!res.ok) throw new Error('加载活动列表失败')
     const data = await res.json()
     events.value = data
 
@@ -52,7 +54,13 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
+}
+
+onMounted(() => {
+  loadStats()
+  window.addEventListener('focus', loadStats)
 })
+onUnmounted(() => window.removeEventListener('focus', loadStats))
 
 function formatDate(dateStr: string) {
   if (!dateStr) return ''
@@ -63,6 +71,7 @@ function formatDate(dateStr: string) {
 
 <template>
   <div class="registration-stats">
+    <button type="button" :disabled="loading" @click="loadStats">刷新统计</button>
     <div v-if="loading" class="loading">加载中...</div>
 
     <div v-else-if="events.length === 0" class="empty">
@@ -88,7 +97,7 @@ function formatDate(dateStr: string) {
                 / {{ event.maxParticipants }}
               </template>
             </span>
-            <span v-if="event.stats.isFull" class="badge full">已满</span>
+            <span v-if="event.stats.full" class="badge full">已满</span>
           </div>
 
           <div class="stat-row">
