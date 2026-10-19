@@ -79,7 +79,7 @@ interface Project {
   status?: string
 }
 
-const API_URL = API_BASE_ROOT
+const API_URL = `${API_BASE_ROOT}/projects`
 
 const projects = ref<Project[]>([])
 const loading = ref(false)
